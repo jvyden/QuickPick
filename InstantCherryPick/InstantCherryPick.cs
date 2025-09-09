@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FrooxEngine;
+using FrooxEngine.UIX;
 using HarmonyLib;
 using ResoniteModLoader;
 
@@ -14,6 +15,9 @@ public partial class InstantCherryPick : ResoniteMod
     
     public static ModConfiguration? Config { get; private set; }
 
+    internal static bool InitializingSelector;
+    internal static ComponentSelector? GeneratedSelector;
+
     public override void OnEngineInit()
     {
         Harmony harmony = new("xyz.jvyden." + nameof(InstantCherryPick));
@@ -23,37 +27,29 @@ public partial class InstantCherryPick : ResoniteMod
     }
 
     [SuppressMessage("ReSharper", "ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract")]
-    public static void HandleOpenedWindow(Worker worker)
+    public static void HandleOpenedWindow()
     {
-        // Match both vanilla name and CherryPick flair
-        // https://github.com/BlueCyro/CherryPick/blob/master/ComponentSelector_Patcher.cs#L38
-        Slot? selector = worker.LocalUserSpace.FindChild(s => s.Name == "Node Browser" || s.Name == "Component Selector" || s.Name.Contains("CherryPick"), 0);
+        ComponentSelector? selector = GeneratedSelector;
         if (selector == null)
         {
-            Error("Must find selector slot");
+            Error("Must find selector component");
             return;
         }
 
-        if (selector.GetComponent(typeof(ComponentSelector), true) == null)
-        {
-            Error($"Must find selector slot with {nameof(ComponentSelector)}");
-            return;
-        }
-        
-        // Debug($"Found selector: {selector}");
+        if (Config!.GetValue(FocusUi))
+            selector.World.GetScreen().FocusUI(selector.Slot.GetComponent<Canvas>());
 
-        if (Config!.GetValue(FreecamFocus))
-            selector.FocusFreecam();
-        
-        Slot? searchBar = selector.FindChildInHierarchy("Content").FindChildInHierarchy("Horizontal Layout").Children.FirstOrDefault();
-        TextEditor? textEditor = searchBar?.GetComponent<TextEditor>();
-        if (searchBar == null || textEditor == null)
+        if (Config.GetValue(TextboxFocus))
         {
-            Warn("Could not find CherryPick search bar");
-            return;
-        }
+            // ugly search
+            Slot? searchBar = selector.Slot.FindChildInHierarchy("Content").FindChildInHierarchy("Horizontal Layout").Children.FirstOrDefault();
+            TextEditor? textEditor = searchBar?.GetComponent<TextEditor>();
+            if (searchBar == null || textEditor == null)
+            {
+                Warn("Could not find CherryPick search bar");
+            }
         
-        if(Config.GetValue(TextboxFocus))
-            textEditor.Focus();
+            textEditor?.Focus();
+        }
     }
 }
