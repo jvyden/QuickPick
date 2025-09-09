@@ -17,6 +17,7 @@ public partial class InstantCherryPick : ResoniteMod
 
     internal static bool InitializingSelector;
     internal static ComponentSelector? GeneratedSelector;
+    internal static IUIInterface? PreviousUI;
 
     public override void OnEngineInit()
     {
@@ -37,7 +38,14 @@ public partial class InstantCherryPick : ResoniteMod
         }
 
         if (Config!.GetValue(FocusUi))
-            selector.World.GetScreen().FocusUI(selector.Slot.GetComponent<Canvas>());
+        {
+            ScreenController screen = selector.World.GetScreen();
+
+            if (screen.ActiveTargetting.Target is UI_TargettingController ui)
+                PreviousUI = ui.Target.Target;
+
+            screen.FocusUI(selector.Slot.GetComponent<Canvas>());
+        }
 
         if (Config.GetValue(TextboxFocus))
         {
