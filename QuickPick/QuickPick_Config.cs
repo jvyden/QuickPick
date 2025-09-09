@@ -1,11 +1,11 @@
 using ResoniteModLoader;
 
-namespace InstantCherryPick;
+namespace QuickPick;
 
-public partial class InstantCherryPick // Config
+public partial class QuickPick // Config
 {
     [AutoRegisterConfigKey]
-    public static readonly ModConfigurationKey<bool> Enabled = new("Enabled", "When checked, enables InstantCherryPick", () => true);
+    public static readonly ModConfigurationKey<bool> Enabled = new("Enabled", "When checked, enables QuickPick", () => true);
     
     [AutoRegisterConfigKey]
     public static readonly ModConfigurationKey<bool> FocusUi = new("FocusUI", "When checked, zoom onto the spawned window.", () => true);

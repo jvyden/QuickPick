@@ -3,7 +3,7 @@ using FrooxEngine;
 using HarmonyLib;
 using Renderite.Shared;
 
-namespace InstantCherryPick.Patches;
+namespace QuickPick.Patches;
 
 [HarmonyPatch(typeof(ComponentSelector))]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -16,14 +16,14 @@ public class ComponentSelectorPatches
     public static void ComponentSelectorOnAttachPrefix(ComponentSelector __instance)
     {
         bool shift = __instance.Engine.InputInterface.GetKey(Key.Shift);
-        if (!InstantCherryPick.InitializingSelector && !shift)
+        if (!QuickPick.InitializingSelector && !shift)
             return;
 
-        InstantCherryPick.GeneratedSelector = __instance;
+        QuickPick.GeneratedSelector = __instance;
         __instance.StartTask(async () =>
         {
             await default(NextUpdate);
-            InstantCherryPick.HandleOpenedWindow();
+            QuickPick.HandleOpenedWindow();
         });
     }
 
@@ -31,25 +31,25 @@ public class ComponentSelectorPatches
     [HarmonyPostfix]
     public static void OnAddComponentPressedPostfix()
     {
-        if (!InstantCherryPick.Config!.GetValue(InstantCherryPick.DestroySearch)) return;
+        if (!QuickPick.Config!.GetValue(QuickPick.DestroySearch)) return;
 
-        InstantCherryPick.GeneratedSelector?.Slot.Destroy();
+        QuickPick.GeneratedSelector?.Slot.Destroy();
 
-        if (InstantCherryPick.Config.GetValue(InstantCherryPick.FocusUi))
+        if (QuickPick.Config.GetValue(QuickPick.FocusUi))
         {
-            ScreenController? screen = InstantCherryPick.GeneratedSelector?.World.GetScreen();
+            ScreenController? screen = QuickPick.GeneratedSelector?.World.GetScreen();
             screen?.UnfocusUI();
 
             // HACK: since view targeting isn't a stack, we need to preserve the last UI on our own
             // if we force UI to be the previous target, we can get the user stuck in UI targeting mode 
-            if (InstantCherryPick.PreviousUI != null)
+            if (QuickPick.PreviousUI != null)
             {
-                screen?.FocusUI(InstantCherryPick.PreviousUI);
-                InstantCherryPick.PreviousUI = null;
+                screen?.FocusUI(QuickPick.PreviousUI);
+                QuickPick.PreviousUI = null;
             }
         }
         
-        InstantCherryPick.GeneratedSelector = null;
+        QuickPick.GeneratedSelector = null;
     }
     
 }

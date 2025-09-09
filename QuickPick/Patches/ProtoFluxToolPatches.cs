@@ -5,7 +5,7 @@ using FrooxEngine.ProtoFlux;
 using HarmonyLib;
 using Renderite.Shared;
 
-namespace InstantCherryPick.Patches;
+namespace QuickPick.Patches;
 
 [HarmonyPatch(typeof(ProtoFluxTool))]
 [SuppressMessage("ReSharper", "InconsistentNaming")]
@@ -19,15 +19,15 @@ public static class ProtoFluxToolPatches
     [HarmonyPrefix]
     public static void OnCommonUpdatePrefix(ProtoFluxTool __instance)
     {
-        if (!InstantCherryPick.Config!.GetValue(InstantCherryPick.Enabled))
+        if (!QuickPick.Config!.GetValue(QuickPick.Enabled))
             return;
         
         InputInterface input = __instance.Engine.InputInterface;
         if (!input.GetKey(Key.Control) || !input.GetKeyDown(Key.G))
             return;
 
-        InstantCherryPick.InitializingSelector = true;
+        QuickPick.InitializingSelector = true;
         OpenNodeBrowser.Invoke(__instance, [null, null]);
-        InstantCherryPick.InitializingSelector = false;
+        QuickPick.InitializingSelector = false;
     }
 }

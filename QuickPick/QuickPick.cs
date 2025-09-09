@@ -4,14 +4,14 @@ using FrooxEngine.UIX;
 using HarmonyLib;
 using ResoniteModLoader;
 
-namespace InstantCherryPick;
+namespace QuickPick;
 
-public partial class InstantCherryPick : ResoniteMod
+public partial class QuickPick : ResoniteMod
 {
-    public override string Name => nameof(InstantCherryPick);
+    public override string Name => nameof(QuickPick);
     public override string Author => "jvyden";
-    public override string Version => typeof(InstantCherryPick).Assembly.GetName().Version?.ToString() ?? "0.0.0";
-    public override string Link => "https://github.com/jvyden/" + nameof(InstantCherryPick);
+    public override string Version => typeof(QuickPick).Assembly.GetName().Version?.ToString() ?? "0.0.0";
+    public override string Link => "https://github.com/jvyden/" + nameof(QuickPick);
     
     public static ModConfiguration? Config { get; private set; }
 
@@ -21,7 +21,7 @@ public partial class InstantCherryPick : ResoniteMod
 
     public override void OnEngineInit()
     {
-        Harmony harmony = new("xyz.jvyden." + nameof(InstantCherryPick));
+        Harmony harmony = new("xyz.jvyden." + nameof(QuickPick));
         Config = GetConfiguration();
         Config?.Save(true);
         harmony.PatchAll();

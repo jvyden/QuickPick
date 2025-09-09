@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstantCherryPick", "InstantCherryPick\InstantCherryPick.csproj", "{DD665A37-8D92-4E48-B3E1-C0A82019D0BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickPick", "QuickPick\QuickPick.csproj", "{DD665A37-8D92-4E48-B3E1-C0A82019D0BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
