@@ -19,6 +19,11 @@ public static class ProtoFluxToolPatches
     [HarmonyPrefix]
     public static void OnCommonUpdatePrefix(ProtoFluxTool __instance)
     {
+        InteractionHandler? handler = __instance.ActiveHandler;
+        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+        if (handler == null || !handler.IsOwnedByLocalUser)
+            return;
+        
         if (!QuickPick.Config!.GetValue(QuickPick.Enabled))
             return;
         
